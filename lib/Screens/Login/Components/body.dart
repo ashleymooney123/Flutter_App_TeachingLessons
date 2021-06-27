@@ -2,6 +2,7 @@ import 'package:can_med_app/Components/RoundedButton/rounded_button.dart';
 import 'package:can_med_app/Screens/Login/Components/background.dart';
 import 'package:can_med_app/Screens/Login/Components/divider.dart';
 import 'package:can_med_app/Screens/Login/Components/social_icon.dart';
+import 'package:can_med_app/Screens/ResetPassword/ForgotPassword_screen.dart';
 import 'package:can_med_app/Screens/SignUp/signup_screen.dart';
 import 'package:can_med_app/UI/Design/design.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +101,7 @@ class _LoginState extends State<Login> {
                             color: kDarkTeal, fontWeight: FontWeight.bold)),
                     onTap: () {
                       //Navigate to forgot password
-
+                      navigateToForgotPassword();
                     },
                   ),
                 ],
@@ -136,6 +137,12 @@ class _LoginState extends State<Login> {
   void navigateToSignUp() {
     Navigator.push(context, MaterialPageRoute(builder: (context)=> SignUpScreen()));
   }
+
+  void navigateToForgotPassword() {
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> ResetScreen()));
+  }
+
+
 }
 
 class GoogleSignin {}
