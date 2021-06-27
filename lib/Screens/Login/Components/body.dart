@@ -2,6 +2,7 @@ import 'package:can_med_app/Components/RoundedButton/rounded_button.dart';
 import 'package:can_med_app/Screens/Login/Components/background.dart';
 import 'package:can_med_app/Screens/Login/Components/divider.dart';
 import 'package:can_med_app/Screens/Login/Components/social_icon.dart';
+import 'package:can_med_app/Screens/SignUp/signup_screen.dart';
 import 'package:can_med_app/UI/Design/design.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -86,18 +87,20 @@ class _LoginState extends State<Login> {
                   GestureDetector(
                     child: Text("Create an Account",
                         style: TextStyle(
-                            color: kPrimaryTeal, fontWeight: FontWeight.bold)),
+                            color: kDarkTeal, fontWeight: FontWeight.bold)),
                     onTap: () {
 //Navigate to Sign Up
+                    navigateToSignUp();
                     },
                   ),
                   SizedBox(width: size.width * 0.10),
                   GestureDetector(
                     child: Text("Forgot Password",
                         style: TextStyle(
-                            color: kPrimaryTeal, fontWeight: FontWeight.bold)),
+                            color: kDarkTeal, fontWeight: FontWeight.bold)),
                     onTap: () {
                       //Navigate to forgot password
+
                     },
                   ),
                 ],
@@ -129,6 +132,10 @@ class _LoginState extends State<Login> {
   }
 
   void login() {}
+
+  void navigateToSignUp() {
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> SignUpScreen()));
+  }
 }
 
 class GoogleSignin {}
