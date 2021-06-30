@@ -4,6 +4,7 @@ import 'package:can_med_app/Screens/Login/login_screen.dart';
 import 'package:can_med_app/Screens/SignUp/Components/divider.dart';
 import 'package:can_med_app/Screens/SignUp/Components/social_icon.dart';
 import 'package:can_med_app/UI/Design/design.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -14,10 +15,63 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
 
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String _name , _email , _password;
 
+  checkAuthentication()async{
+    _auth.authStateChanges().listen((user) async{
+      if(user != null){
+        print("User is logged in");
+        print("$user");
+        //Navigation to Home
+      }
+    });
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    this.checkAuthentication();
+  }
+
+  signUp() async{
+    if(_formKey.currentState.validate()){
+      _formKey.currentState.save();
+      try{
+        UserCredential user = await _auth.createUserWithEmailAndPassword(
+          email: _email, password: _password
+        );
+        if(user != null){
+          await _auth.currentUser.updateProfile(displayName: _name);
+          print("$_name");
+        }
+      }catch (e){
+        showError(e.message);
+        print(e);
+      }
+    }
+  }
+
+  showError(String errorMessage){
+    showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return AlertDialog(
+          title: Text("ERROR"),
+          content: Text(errorMessage),
+          actions: <Widget>[
+            TextButton(onPressed: (){
+              Navigator.of(context).pop();
+            },
+                child: Text("OK"))
+          ],
+        );
+      }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +103,7 @@ class _SignUpState extends State<SignUp> {
                             labelText: "Name",
                             prefixIcon: Icon(Icons.person),
                           ),
-                          onSaved: (input)=> _name = input,
+                          onChanged: (input)=> _name = input,
                         ),
                       )
                     ],
@@ -67,7 +121,7 @@ class _SignUpState extends State<SignUp> {
                       labelText: "Email",
                       prefixIcon: Icon(Icons.email),
                     ),
-                    onSaved: (input) => _email = input),
+                    onChanged: (input) => _email = input),
               ),
               //Password
               Container(
@@ -82,7 +136,7 @@ class _SignUpState extends State<SignUp> {
                       prefixIcon: Icon(Icons.lock),
                     ),
                     obscureText: true,
-                    onSaved: (input) => _password = input),
+                    onChanged: (input) => _password = input),
               ),
               SizedBox(height: size.height*0.03,),
               RoundedButton(
@@ -136,10 +190,6 @@ Row(
     );
   }
 
-  void signUp() {
-
-  }
-
   void FacebookSignin() {
 
   }
@@ -151,4 +201,5 @@ Row(
   void navigateToLoginScreen() {
     Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
   }
+
 }
